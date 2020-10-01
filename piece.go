@@ -11,6 +11,7 @@ func RandomPiece() Piece {
 	p := Piece{}
 	p.blocks = allPieces[rand.Intn(7)]
 	p.color = "lightblue"
+	p.positionX = 20
 	return p
 }
 
@@ -22,19 +23,21 @@ type Piece struct {
 	positionY int32
 }
 
-func (p *Piece) Rotate() {
+func (p *Piece) Rotate(normal bool) {
 	switch len(p.blocks) {
 	case 4:
-		switch p.rotation {
-		case 0, 1, 2:
-			log.Println("Rotated", p.rotation)
-			p.rotation++
-		case 3:
-			p.rotation = 0
-			log.Println("Rotated to 0")
-		default:
-			log.Fatalf("Invalid rotation state")
+		if normal {
+			p.rotation += 1
+			if p.rotation > 3 {
+				p.rotation = 0
+			}
+		} else {
+			p.rotation -= 1
+			if p.rotation < 0 {
+				p.rotation = 3
+			}
 		}
+
 	default:
 		log.Fatalf("Invalid blocks passed to rotate %v", p.blocks)
 	}
@@ -46,15 +49,10 @@ func (p Piece) Draw(renderer *sdl.Renderer) {
 			if box > 0 {
 				r, g, b, a, _ := renderer.GetDrawColor()
 				renderer.SetDrawColor(colors[p.color][0], colors[p.color][1], colors[p.color][2], colors[p.color][3])
-				renderer.FillRect(&sdl.Rect{p.positionX + int32(x*20), p.positionY + int32(y*20), 20, 20})
+				renderer.FillRect(&sdl.Rect{(p.positionX + int32(x)) * 20, (p.positionY + int32(y)) * 20, 20, 20})
 				renderer.SetDrawColor(0, 0, 0, 0)
-				renderer.DrawRect(&sdl.Rect{p.positionX + int32(x*20), p.positionY + int32(y*20), 20, 20})
+				renderer.DrawRect(&sdl.Rect{(p.positionX + int32(x)) * 20, (p.positionY + int32(y)) * 20, 20, 20})
 				renderer.SetDrawColor(r, g, b, a)
-			} else {
-				renderer.SetDrawColor(colors[p.color][3], colors[p.color][2], colors[p.color][1], colors[p.color][0])
-				renderer.FillRect(&sdl.Rect{p.positionX + int32(x*20), p.positionY + int32(y*20), 20, 20})
-				renderer.SetDrawColor(0, 0, 0, 0)
-				renderer.DrawRect(&sdl.Rect{p.positionX + int32(x*20), p.positionY + int32(y*20), 20, 20})
 			}
 
 		}

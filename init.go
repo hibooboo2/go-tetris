@@ -26,9 +26,9 @@ func main() {
 				case 768: //Key Press
 					switch e.Keysym.Sym {
 					case 97, 1073741904: //Left
-						p.Rotate()
+						p.Rotate(false)
 					case 100, 1073741903: //Right
-						p.Rotate()
+						p.Rotate(true)
 					default:
 						log.Printf("Key was: %v", e.Keysym.Sym)
 					}
