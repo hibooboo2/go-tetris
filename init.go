@@ -2,13 +2,16 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"runtime"
+	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
 
 	running := true
 
@@ -22,9 +25,9 @@ func main() {
 				switch e.Type {
 				case 768: //Key Press
 					switch e.Keysym.Sym {
-					case 1073741904: //Left
+					case 97, 1073741904: //Left
 						p.Rotate()
-					case 1073741903: //Right
+					case 100, 1073741903: //Right
 						p.Rotate()
 					default:
 						log.Printf("Key was: %v", e.Keysym.Sym)

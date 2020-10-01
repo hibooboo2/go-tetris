@@ -2,13 +2,14 @@ package main
 
 import (
 	"log"
+	"math/rand"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 func RandomPiece() Piece {
 	p := Piece{}
-	p.blocks = allPieces[0]
+	p.blocks = allPieces[rand.Intn(7)]
 	p.color = "lightblue"
 	return p
 }
@@ -60,7 +61,15 @@ func (p Piece) Draw(renderer *sdl.Renderer) {
 	}
 }
 
-var allPieces = [][][][]int{Line_piece, BlueL_piece}
+var allPieces = [][][][]int{
+	Line_piece,
+	BlueL_piece,
+	OrangeL_piece,
+	Square_piece,
+	GreenS_piece,
+	PurpleT_piece,
+	RedS_piece,
+}
 
 var Line_piece = [][][]int{
 	{
@@ -118,9 +127,39 @@ var OrangeL_piece = [][][]int{
 		{1, 1, 1},
 		{0, 0, 0},
 	},
+	{
+		{0, 1, 0},
+		{0, 1, 0},
+		{0, 1, 1},
+	},
+	{
+		{0, 0, 0},
+		{1, 1, 1},
+		{1, 0, 0},
+	},
+	{
+		{1, 1, 0},
+		{0, 1, 0},
+		{0, 1, 0},
+	},
 }
 
 var Square_piece = [][][]int{
+	{
+		{0, 1, 1, 0},
+		{0, 1, 1, 0},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 1, 1, 0},
+		{0, 1, 1, 0},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 1, 1, 0},
+		{0, 1, 1, 0},
+		{0, 0, 0, 0},
+	},
 	{
 		{0, 1, 1, 0},
 		{0, 1, 1, 0},
@@ -133,6 +172,21 @@ var GreenS_piece = [][][]int{
 		{1, 1, 0},
 		{0, 0, 0},
 	},
+	{
+		{0, 1, 0},
+		{0, 1, 1},
+		{0, 0, 1},
+	},
+	{
+		{0, 0, 0},
+		{0, 1, 1},
+		{1, 1, 0},
+	},
+	{
+		{1, 0, 0},
+		{1, 1, 0},
+		{0, 1, 0},
+	},
 }
 
 var PurpleT_piece = [][][]int{
@@ -141,6 +195,21 @@ var PurpleT_piece = [][][]int{
 		{1, 1, 1},
 		{0, 0, 0},
 	},
+	{
+		{0, 1, 0},
+		{0, 1, 1},
+		{0, 1, 0},
+	},
+	{
+		{0, 0, 0},
+		{1, 1, 1},
+		{0, 1, 0},
+	},
+	{
+		{0, 1, 0},
+		{1, 1, 0},
+		{0, 1, 0},
+	},
 }
 
 var RedS_piece = [][][]int{
@@ -148,6 +217,21 @@ var RedS_piece = [][][]int{
 		{1, 1, 0},
 		{0, 1, 1},
 		{0, 0, 0},
+	},
+	{
+		{0, 0, 1},
+		{0, 1, 1},
+		{0, 1, 0},
+	},
+	{
+		{0, 0, 0},
+		{1, 1, 0},
+		{0, 1, 1},
+	},
+	{
+		{0, 1, 0},
+		{1, 1, 0},
+		{1, 0, 0},
 	},
 }
 
