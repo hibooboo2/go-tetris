@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"runtime"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -8,15 +9,30 @@ import (
 )
 
 func main() {
-	rect := sdl.Rect{0, 0, 100, 100}
 
 	running := true
 
 	renderer, cancel := GetRenderer(600, 800)
 	defer cancel()
+	p := RandomPiece()
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-			switch event.(type) {
+			switch e := event.(type) {
+			case *sdl.KeyboardEvent:
+				switch e.Type {
+				case 768: //Key Press
+					switch e.Keysym.Sym {
+					case 1073741904: //Left
+						p.Rotate()
+					case 1073741903: //Right
+						p.Rotate()
+					default:
+						log.Printf("Key was: %v", e.Keysym.Sym)
+					}
+				case 769: //Key release
+				default:
+					log.Printf("Type was: %v", e.Type)
+				}
 			case *sdl.QuitEvent:
 				println("Quit")
 				running = false
@@ -25,9 +41,7 @@ func main() {
 		}
 		renderer.Clear()
 		renderer.SetDrawColor(255, 0, 0, 0)
-		renderer.DrawRect(&rect)
-
-		renderer.DrawLine(0, 0, 800, 800)
+		p.Draw(renderer)
 		renderer.SetDrawColor(0, 0, 0, 0)
 		renderer.Present()
 	}
