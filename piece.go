@@ -7,18 +7,22 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func RandomPiece() Piece {
+func RandomPiece(rootX int32, rootY int32) *Piece {
 	p := Piece{}
-	p.blocks = allPieces[rand.Intn(7)]
-	p.color = "lightblue"
-	p.positionX = 20
-	return p
+	p.positionX = 3
+	p.rootX = rootX
+	p.rootY = rootY
+	p.blockType = rand.Intn(7)
+	p.blocks = allPieces[p.blockType]
+	return &p
 }
 
 type Piece struct {
 	blocks    [][][]int
-	color     string
+	blockType int
 	rotation  int
+	rootX     int32
+	rootY     int32
 	positionX int32
 	positionY int32
 }
@@ -48,10 +52,10 @@ func (p Piece) Draw(renderer *sdl.Renderer) {
 		for x, box := range p.blocks[p.rotation][y] {
 			if box > 0 {
 				r, g, b, a, _ := renderer.GetDrawColor()
-				renderer.SetDrawColor(colors[p.color][0], colors[p.color][1], colors[p.color][2], colors[p.color][3])
-				renderer.FillRect(&sdl.Rect{(p.positionX + int32(x)) * 20, (p.positionY + int32(y)) * 20, 20, 20})
+				SetDrawColor(renderer, colorsToPiece[p.blockType])
+				renderer.FillRect(&sdl.Rect{(p.positionX+int32(x))*20 + p.rootX, (p.positionY+int32(y))*20 + p.rootY, 20, 20})
 				renderer.SetDrawColor(0, 0, 0, 0)
-				renderer.DrawRect(&sdl.Rect{(p.positionX + int32(x)) * 20, (p.positionY + int32(y)) * 20, 20, 20})
+				renderer.DrawRect(&sdl.Rect{(p.positionX+int32(x))*20 + p.rootX, (p.positionY+int32(y))*20 + p.rootY, 20, 20})
 				renderer.SetDrawColor(r, g, b, a)
 			}
 
@@ -69,6 +73,15 @@ var allPieces = [][][][]int{
 	RedS_piece,
 }
 
+var colorsToPiece = []string{
+	"lightblue",
+	"blue",
+	"orange",
+	"yellow",
+	"green",
+	"purple",
+	"red",
+}
 var Line_piece = [][][]int{
 	{
 		{0, 0, 0, 0},
@@ -231,8 +244,4 @@ var RedS_piece = [][][]int{
 		{1, 1, 0},
 		{1, 0, 0},
 	},
-}
-
-var colors = map[string][]uint8{
-	"lightblue": []uint8{0, 100, 125, 255},
 }

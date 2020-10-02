@@ -17,7 +17,7 @@ func main() {
 
 	renderer, cancel := GetRenderer(600, 800)
 	defer cancel()
-	p := RandomPiece()
+	g := NewGame(300, 50)
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch e := event.(type) {
@@ -26,9 +26,9 @@ func main() {
 				case 768: //Key Press
 					switch e.Keysym.Sym {
 					case 97, 1073741904: //Left
-						p.Rotate(false)
+						// p.Rotate(false)
 					case 100, 1073741903: //Right
-						p.Rotate(true)
+						// p.Rotate(true)
 					default:
 						log.Printf("Key was: %v", e.Keysym.Sym)
 					}
@@ -44,7 +44,7 @@ func main() {
 		}
 		renderer.Clear()
 		renderer.SetDrawColor(255, 0, 0, 0)
-		p.Draw(renderer)
+		g.Draw(renderer)
 		renderer.SetDrawColor(0, 0, 0, 0)
 		renderer.Present()
 	}
