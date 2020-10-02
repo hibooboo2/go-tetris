@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.Lshortfile)
 	rand.Seed(time.Now().UnixNano())
 
 	running := true
@@ -18,6 +19,7 @@ func main() {
 	renderer, cancel := GetRenderer(600, 800)
 	defer cancel()
 	g := NewGame(300, 50)
+	g.Start()
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch e := event.(type) {
@@ -26,9 +28,13 @@ func main() {
 				case 768: //Key Press
 					switch e.Keysym.Sym {
 					case 97, 1073741904: //Left
-						// p.Rotate(false)
+						g.MoveLeft()
 					case 100, 1073741903: //Right
-						// p.Rotate(true)
+						g.MoveRight()
+					case 32: //Space
+						g.Rotate()
+					case 115, 1073741905: //Down
+						g.MoveDown()
 					default:
 						log.Printf("Key was: %v", e.Keysym.Sym)
 					}

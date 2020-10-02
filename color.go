@@ -8,6 +8,8 @@ import (
 
 func SetDrawColor(renderer *sdl.Renderer, color string) {
 	switch color {
+	case "black":
+		renderer.SetDrawColor(0, 0, 0, 0)
 	case "lightblue":
 		renderer.SetDrawColor(0x69, 0xff, 0xff, 255)
 	case "green":
