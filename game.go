@@ -27,6 +27,7 @@ func NewGame(rootX int32, rootY int32) *Game {
 
 type Game struct {
 	fallingPiece *Piece
+	heldPiece    *Piece
 	board        [][]int
 	RootX        int32
 	RootY        int32
@@ -141,6 +142,21 @@ func (g *Game) MoveDown() {
 		g.fallingPiece.positionY--
 	}
 	g.lock.Unlock()
+}
+
+func (g *Game) HoldPiece() {
+	g.lock.Lock()
+	defer g.lock.Unlock()
+	if g.heldPiece == nil {
+		g.heldPiece = g.fallingPiece
+		g.fallingPiece = RandomPiece(g.RootX, g.RootY)
+	} else {
+		tmp := g.heldPiece
+		g.heldPiece = g.fallingPiece
+		g.fallingPiece = tmp
+	}
+	g.heldPiece.positionX = 3
+	g.heldPiece.positionY = 0
 }
 
 func (g *Game) canMoveTo() bool {

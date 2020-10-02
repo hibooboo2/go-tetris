@@ -35,6 +35,8 @@ func main() {
 						g.Rotate()
 					case 115, 1073741905: //Down
 						g.MoveDown()
+					case 1073742053: //Shift
+						g.HoldPiece()
 					default:
 						log.Printf("Key was: %v", e.Keysym.Sym)
 					}
