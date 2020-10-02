@@ -26,13 +26,14 @@ func NewGame(rootX int32, rootY int32) *Game {
 }
 
 type Game struct {
-	fallingPiece *Piece
-	heldPiece    *Piece
-	board        [][]int
-	RootX        int32
-	RootY        int32
-	lock         sync.RWMutex
-	level        int
+	fallingPiece  *Piece
+	heldPiece     *Piece
+	lastHeldPiece *Piece
+	board         [][]int
+	RootX         int32
+	RootY         int32
+	lock          sync.RWMutex
+	level         int
 }
 
 func (g *Game) Draw(renderer *sdl.Renderer) {
@@ -147,13 +148,16 @@ func (g *Game) MoveDown() {
 func (g *Game) HoldPiece() {
 	g.lock.Lock()
 	defer g.lock.Unlock()
+	if g.heldPiece != nil && g.fallingPiece == g.lastHeldPiece {
+		return
+	}
 	if g.heldPiece == nil {
 		g.heldPiece = g.fallingPiece
 		g.fallingPiece = RandomPiece(g.RootX, g.RootY)
 	} else {
-		tmp := g.heldPiece
+		g.lastHeldPiece = g.heldPiece
 		g.heldPiece = g.fallingPiece
-		g.fallingPiece = tmp
+		g.fallingPiece = g.lastHeldPiece
 	}
 	g.heldPiece.positionX = 3
 	g.heldPiece.positionY = 0
